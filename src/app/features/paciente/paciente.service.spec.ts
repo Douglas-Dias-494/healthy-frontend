@@ -65,6 +65,54 @@ describe('PacienteService', () => {
     request.flush(null, { status: 204, statusText: 'No Content' });
   });
 
+  it('should GET the profile (ficha) of the logged patient', () => {
+    service.getProfile().subscribe();
+    const request = http.expectOne(`${base}/ficha`);
+    expect(request.request.method).toBe('GET');
+    request.flush({
+      nome: 'Maria',
+      email: 'maria@x.com',
+      cpf: null,
+      dataNascimento: null,
+      telefone: null,
+    });
+  });
+
+  it('should PUT the profile with digits only', () => {
+    const data = {
+      nome: 'Maria Silva',
+      cpf: '52998224725',
+      dataNascimento: '1990-05-17',
+      telefone: '11987654321',
+    };
+    service.updateProfile(data).subscribe();
+
+    const request = http.expectOne(`${base}/ficha`);
+    expect(request.request.method).toBe('PUT');
+    expect(request.request.body).toEqual(data);
+    request.flush({ ...data, email: 'maria@x.com' });
+  });
+
+  it('should show the backend message when the CPF belongs to another account', async () => {
+    const result = firstValueFrom(
+      service.updateProfile({
+        nome: 'Maria',
+        cpf: '52998224725',
+        dataNascimento: '1990-05-17',
+        telefone: null,
+      }),
+    );
+
+    http
+      .expectOne(`${base}/ficha`)
+      .flush(
+        { status: 409, detail: 'Este CPF já está cadastrado em outra conta.' },
+        { status: 409, statusText: 'Conflict' },
+      );
+
+    await expect(result).rejects.toThrow('Este CPF já está cadastrado em outra conta.');
+  });
+
   it('should surface the backend message on errors', async () => {
     const result = firstValueFrom(
       service.startTracking({

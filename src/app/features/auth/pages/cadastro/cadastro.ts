@@ -1,28 +1,11 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../../../core/auth/auth.service';
 import { CadastroRequest, Perfil } from '../../../../core/models/auth.model';
-
-/**
- * Validador de GRUPO: olha dois campos ao mesmo tempo.
- * Validadores de campo só enxergam o próprio valor; para comparar senha com confirmação
- * é preciso validar o grupo inteiro. O erro fica em form.errors (e não no campo).
- */
-const passwordsMatch: ValidatorFn = (grupo: AbstractControl): ValidationErrors | null => {
-  const senha = grupo.get('senha')?.value;
-  const confirmacao = grupo.get('confirmarSenha')?.value;
-  return senha === confirmacao ? null : { senhasDiferentes: true };
-};
+import { fieldsMatch, strongPassword } from '../../../../core/validators/validators';
 
 @Component({
   selector: 'app-cadastro',
@@ -39,13 +22,14 @@ export class Cadastro {
       perfil: ['PACIENTE' as Perfil, Validators.required],
       nome: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(100)]],
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
-      senha: ['', [Validators.required, Validators.minLength(6)]],
+      senha: ['', [Validators.required, strongPassword()]],
       confirmarSenha: ['', Validators.required],
       // Só valem para médico; as regras são ligadas/desligadas no effect abaixo
       crm: [''],
       especialidade: [''],
     },
-    { validators: passwordsMatch },
+    // Validador de GRUPO: compara dois campos (um validador de campo só enxerga o próprio valor)
+    { validators: fieldsMatch('senha', 'confirmarSenha') },
   );
 
   // valueChanges é um Observable; toSignal o transforma em signal para usar no template e no computed

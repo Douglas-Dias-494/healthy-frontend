@@ -1,0 +1,72 @@
+<header class="page-header">
+  <h1>Meu perfil</h1>
+  <p>Seus dados pessoais. Só você os vê: os médicos não têm acesso ao CPF.</p>
+</header>
+
+@if (profile.error(); as message) {
+  <p class="alert alert--error" role="alert">{{ message }}</p>
+} @else if (profile.data(); as data) {
+  <div class="perfil">
+    <section class="card">
+      <h2 class="card__title">Dados pessoais</h2>
+      <p class="card__subtitle">E-mail da conta: {{ data.email }}</p>
+
+      <form class="ficha" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label class="field__label" for="nome">Nome completo</label>
+          <input class="field__input" id="nome" type="text" autocomplete="name" formControlName="nome" />
+          @if (form.controls.nome.touched && form.controls.nome.invalid) {
+            <p class="field__error" role="alert">Informe seu nome (mínimo de 3 letras).</p>
+          }
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label class="field__label" for="cpf">CPF</label>
+            <input class="field__input" id="cpf" type="text" inputmode="numeric" autocomplete="off" formControlName="cpf" placeholder="000.000.000-00" />
+            @if (form.controls.cpf.touched && form.controls.cpf.hasError('required')) {
+              <p class="field__error" role="alert">Informe o CPF.</p>
+            } @else if (form.controls.cpf.touched && form.controls.cpf.hasError('cpf')) {
+              <p class="field__error" role="alert">CPF inválido.</p>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="dataNascimento">Data de nascimento</label>
+            <input class="field__input" id="dataNascimento" type="date" [max]="today" autocomplete="bday" formControlName="dataNascimento" />
+            @if (form.controls.dataNascimento.touched && form.controls.dataNascimento.hasError('required')) {
+              <p class="field__error" role="alert">Informe a data de nascimento.</p>
+            } @else if (form.controls.dataNascimento.touched && form.controls.dataNascimento.hasError('future')) {
+              <p class="field__error" role="alert">A data não pode ser futura.</p>
+            }
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="telefone">Telefone (opcional)</label>
+          <input class="field__input" id="telefone" type="tel" autocomplete="tel" formControlName="telefone" placeholder="(11) 98765-4321" />
+          @if (form.controls.telefone.touched && form.controls.telefone.hasError('phone')) {
+            <p class="field__error" role="alert">Informe o telefone com DDD.</p>
+          }
+        </div>
+
+        @if (error(); as message) {
+          <p class="alert alert--error" role="alert">{{ message }}</p>
+        }
+        @if (success()) {
+          <p class="alert alert--success" role="status">Perfil salvo.</p>
+        }
+
+        <div class="row">
+          <button class="btn btn--primary" type="submit" [disabled]="saving()" [class.is-loading]="saving()">
+            Salvar
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <app-change-password />
+  </div>
+} @else {
+  <p class="loading">Carregando seu perfil…</p>
+}

@@ -7,6 +7,8 @@ import {
   Acompanhamento,
   AtivarAcompanhamentoRequest,
   Atendimento,
+  AtualizarFichaRequest,
+  FichaPaciente,
   Receita,
 } from '../../core/models/clinico.model';
 
@@ -19,6 +21,16 @@ import {
 export class PacienteService {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = `${API_URL}/pacientes/me`;
+
+  /** GET /pacientes/me/ficha: dados pessoais (cpf, nascimento e telefone vêm null até o paciente preencher) */
+  getProfile(): Observable<FichaPaciente> {
+    return this.http.get<FichaPaciente>(`${this.baseUrl}/ficha`).pipe(mapApiError());
+  }
+
+  /** PUT /pacientes/me/ficha: 200 | 400 (CPF inválido...) | 409 CPF de outra conta */
+  updateProfile(data: AtualizarFichaRequest): Observable<FichaPaciente> {
+    return this.http.put<FichaPaciente>(`${this.baseUrl}/ficha`, data).pipe(mapApiError());
+  }
 
   /** GET /pacientes/me/atendimentos: consultas, da mais recente para a mais antiga */
   listAppointments(): Observable<Atendimento[]> {

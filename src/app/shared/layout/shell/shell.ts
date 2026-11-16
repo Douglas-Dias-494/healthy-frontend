@@ -11,11 +11,14 @@ const MENU_PACIENTE: ItemMenu[] = [
   { caminho: '/paciente/medicos', rotulo: 'Meus médicos' },
   { caminho: '/paciente/receitas', rotulo: 'Receitas' },
   { caminho: '/paciente/remedios', rotulo: 'Meus remédios' },
+  { caminho: '/paciente/perfil', rotulo: 'Meu perfil' },
 ];
 
 const MENU_MEDICO: ItemMenu[] = [
   { caminho: '/medico/pacientes', rotulo: 'Meus pacientes' },
+  { caminho: '/medico/registrar-atendimento', rotulo: 'Registrar atendimento' },
   { caminho: '/medico/nova-receita', rotulo: 'Nova receita' },
+  { caminho: '/medico/conta', rotulo: 'Minha conta' },
 ];
 
 /**

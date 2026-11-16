@@ -1,0 +1,59 @@
+<main class="auth-page">
+  <section class="auth-card">
+    <div class="auth-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" />
+        <path d="M3.5 12h4l2-3 3 6 2-3h6" />
+      </svg>
+      <span>Healthy</span>
+    </div>
+
+    @if (done()) {
+      <h1 class="auth-title">Senha redefinida</h1>
+      <p class="alert alert--success" role="status">Pronto! Use a nova senha para entrar.</p>
+      <p class="auth-footer"><a class="link link--strong" routerLink="/login">Ir para o login</a></p>
+    } @else if (invalidLink()) {
+      <h1 class="auth-title">Link inválido</h1>
+      <p class="alert alert--error" role="alert">
+        Este link está incompleto. Peça um novo para redefinir a senha.
+      </p>
+      <p class="auth-footer"><a class="link link--strong" routerLink="/esqueci-senha">Solicitar novo link</a></p>
+    } @else {
+      <h1 class="auth-title">Criar nova senha</h1>
+      <p class="auth-subtitle">Escolha uma senha nova para a sua conta.</p>
+
+      <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label class="field__label" for="novaSenha">Nova senha</label>
+          <input class="field__input" id="novaSenha" type="password" autocomplete="new-password" formControlName="novaSenha" />
+          @if (form.controls.novaSenha.touched && form.controls.novaSenha.hasError('required')) {
+            <p class="field__error" role="alert">Crie uma nova senha.</p>
+          } @else if (form.controls.novaSenha.touched && form.controls.novaSenha.hasError('weakPassword')) {
+            <p class="field__error" role="alert">Use 8 ou mais caracteres, com ao menos uma letra e um número.</p>
+          } @else {
+            <span class="field__hint">8 ou mais caracteres, com letra e número.</span>
+          }
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="confirmarSenha">Confirmar senha</label>
+          <input class="field__input" id="confirmarSenha" type="password" autocomplete="new-password" formControlName="confirmarSenha" />
+          @if (form.controls.confirmarSenha.touched && form.controls.confirmarSenha.hasError('required')) {
+            <p class="field__error" role="alert">Repita a senha.</p>
+          } @else if (form.controls.confirmarSenha.touched && form.hasError('senhasDiferentes')) {
+            <p class="field__error" role="alert">As senhas não conferem.</p>
+          }
+        </div>
+
+        @if (error(); as message) {
+          <p class="alert alert--error" role="alert">{{ message }}</p>
+          <p class="auth-footer"><a class="link link--strong" routerLink="/esqueci-senha">Solicitar novo link</a></p>
+        }
+
+        <button class="btn btn--primary" type="submit" [disabled]="saving()" [class.is-loading]="saving()">
+          Redefinir senha
+        </button>
+      </form>
+    }
+  </section>
+</main>

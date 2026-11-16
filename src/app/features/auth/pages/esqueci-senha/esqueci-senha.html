@@ -1,0 +1,45 @@
+<main class="auth-page">
+  <section class="auth-card">
+    <div class="auth-brand">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" />
+        <path d="M3.5 12h4l2-3 3 6 2-3h6" />
+      </svg>
+      <span>Healthy</span>
+    </div>
+
+    @if (sent()) {
+      <h1 class="auth-title">Verifique seu e-mail</h1>
+      <p class="alert alert--success" role="status">
+        Se existir uma conta com este e-mail, enviamos um link para criar uma nova senha. Ele vale por 30 minutos.
+        Se não chegar, olhe também a caixa de spam.
+      </p>
+      <p class="auth-footer"><a class="link link--strong" routerLink="/login">Voltar para o login</a></p>
+    } @else {
+      <h1 class="auth-title">Esqueci minha senha</h1>
+      <p class="auth-subtitle">Informe o e-mail da sua conta e enviaremos um link para redefinir a senha.</p>
+
+      <form class="auth-form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label class="field__label" for="email">E-mail</label>
+          <input class="field__input" id="email" type="email" autocomplete="email" formControlName="email" placeholder="voce@email.com" />
+          @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+            <p class="field__error" role="alert">Informe seu e-mail.</p>
+          } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+            <p class="field__error" role="alert">Informe um e-mail válido.</p>
+          }
+        </div>
+
+        @if (error(); as message) {
+          <p class="alert alert--error" role="alert">{{ message }}</p>
+        }
+
+        <button class="btn btn--primary" type="submit" [disabled]="sending()" [class.is-loading]="sending()">
+          Enviar link
+        </button>
+      </form>
+
+      <p class="auth-footer">Lembrou a senha? <a class="link link--strong" routerLink="/login">Entrar</a></p>
+    }
+  </section>
+</main>

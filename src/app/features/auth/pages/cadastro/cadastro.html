@@ -78,10 +78,10 @@
             <input class="field__input" id="senha" type="password" autocomplete="new-password" formControlName="senha" />
             @if (form.controls.senha.touched && form.controls.senha.hasError('required')) {
               <p class="field__error" role="alert">Crie uma senha.</p>
-            } @else if (form.controls.senha.touched && form.controls.senha.hasError('minlength')) {
-              <p class="field__error" role="alert">A senha precisa ter ao menos 6 caracteres.</p>
+            } @else if (form.controls.senha.touched && form.controls.senha.hasError('weakPassword')) {
+              <p class="field__error" role="alert">Use 8 ou mais caracteres, com ao menos uma letra e um número.</p>
             } @else {
-              <span class="field__hint">Mínimo de 6 caracteres.</span>
+              <span class="field__hint">8 ou mais caracteres, com letra e número.</span>
             }
           </div>
 

@@ -1,0 +1,38 @@
+.atendimento {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 720px;
+}
+
+.confirmacao {
+  margin: 0 0 0.75rem;
+}
+
+.busca {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+
+.busca__campo {
+  flex: 1;
+  min-width: 240px;
+}
+
+.encontrado {
+  margin-top: 0.75rem;
+
+  p {
+    margin: 0;
+  }
+}
+
+.dados {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 1.1rem;
+}

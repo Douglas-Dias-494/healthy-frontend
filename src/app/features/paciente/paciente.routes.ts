@@ -22,4 +22,9 @@ export const PACIENTE_ROUTES: Routes = [
     title: 'Meus remédios · Healthy',
     loadComponent: () => import('./pages/meus-remedios/meus-remedios').then((m) => m.MeusRemedios),
   },
+  {
+    path: 'perfil',
+    title: 'Meu perfil · Healthy',
+    loadComponent: () => import('./pages/meu-perfil/meu-perfil').then((m) => m.MeuPerfil),
+  },
 ];

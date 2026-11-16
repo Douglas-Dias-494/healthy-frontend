@@ -12,6 +12,18 @@ export function translateError(error: HttpErrorResponse): Error {
     return new Error('Não foi possível conectar ao servidor. Verifique se a API está rodando.');
   }
 
+  // 400 de validação: o servidor manda "erros" com a mensagem de cada campo. A primeira é a mais útil
+  // ("A senha deve ter de 8 a 72 caracteres...") e é melhor que o genérico "Dados inválidos."
+  const fieldErrors: unknown = error.error?.erros;
+  if (fieldErrors && typeof fieldErrors === 'object') {
+    const first = Object.values(fieldErrors as Record<string, unknown>).find(
+      (message): message is string => typeof message === 'string' && message.length > 0,
+    );
+    if (first) {
+      return new Error(first);
+    }
+  }
+
   const detail: unknown = error.error?.detail;
   if (typeof detail === 'string' && detail.length > 0) {
     return new Error(detail);

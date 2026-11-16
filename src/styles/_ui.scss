@@ -406,3 +406,64 @@ textarea.field__input {
   clip: rect(0 0 0 0);
   white-space: nowrap;
 }
+
+/* ---------- Páginas públicas de autenticação (esqueci a senha, redefinir senha...) ---------- */
+.auth-page {
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: 2rem 1.25rem;
+  background: var(--color-bg);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 460px;
+  padding: 2.25rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+
+  @media (max-width: 560px) {
+    padding: 1.75rem 1.25rem;
+  }
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--color-primary);
+
+  svg {
+    width: 1.9rem;
+    height: 1.9rem;
+  }
+}
+
+.auth-title {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.25;
+}
+
+.auth-subtitle {
+  margin: 0.25rem 0 1.5rem;
+  color: var(--color-text-muted);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.auth-footer {
+  margin: 1.25rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}

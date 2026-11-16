@@ -15,6 +15,18 @@ export const routes: Routes = [
     title: 'Criar conta · Healthy',
     loadComponent: () => import('./features/auth/pages/cadastro/cadastro').then((m) => m.Cadastro),
   },
+  {
+    path: 'esqueci-senha',
+    title: 'Esqueci minha senha · Healthy',
+    loadComponent: () =>
+      import('./features/auth/pages/esqueci-senha/esqueci-senha').then((m) => m.EsqueciSenha),
+  },
+  {
+    path: 'redefinir-senha',
+    title: 'Redefinir senha · Healthy',
+    loadComponent: () =>
+      import('./features/auth/pages/redefinir-senha/redefinir-senha').then((m) => m.RedefinirSenha),
+  },
 
   // ---- Áreas logadas ----
   // A rota pai desenha o Shell (menu) e aplica o guard; as filhas aparecem dentro do <router-outlet> dele.

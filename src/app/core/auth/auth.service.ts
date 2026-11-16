@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { API_URL } from '../api.config';
 import { mapApiError } from '../http/translate-error';
 import { CadastroRequest, LoginRequest, LoginResponse } from '../models/auth.model';
@@ -36,7 +36,49 @@ export class AuthService {
     return this.http.post<void>(`${API_URL}/auth/cadastro`, dados).pipe(mapApiError());
   }
 
+  /**
+   * POST /api/auth/esqueci-senha  ->  202 SEMPRE (exista a conta ou não: a API não revela quem tem cadastro)
+   *                                   | 429 tentativas demais
+   */
+  forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>(`${API_URL}/auth/esqueci-senha`, { email }).pipe(mapApiError());
+  }
+
+  /** POST /api/auth/redefinir-senha  ->  204 | 400 link inválido/expirado ou senha fraca | 429 */
+  resetPassword(token: string, newPassword: string): Observable<void> {
+    return this.http
+      .post<void>(`${API_URL}/auth/redefinir-senha`, { token, novaSenha: newPassword })
+      .pipe(mapApiError());
+  }
+
+  /**
+   * POST /api/auth/alterar-senha (usuário logado)  ->  200 com um token NOVO | 400 | 429
+   * Trocar a senha encerra as outras sessões, então o token antigo deixa de valer: guardamos o novo
+   * (no mesmo lugar do antigo) para esta sessão continuar funcionando.
+   */
+  changePassword(currentPassword: string, newPassword: string): Observable<void> {
+    return this.http
+      .post<LoginResponse>(`${API_URL}/auth/alterar-senha`, {
+        senhaAtual: currentPassword,
+        novaSenha: newPassword,
+      })
+      .pipe(
+        mapApiError(),
+        tap((response) => this.startSession(response, this.isRemembered())),
+        map(() => undefined),
+      );
+  }
+
   // ---------- Sessão no navegador ----------
+
+  /** A sessão atual foi guardada com "Lembrar de mim" (localStorage)? */
+  private isRemembered(): boolean {
+    try {
+      return localStorage.getItem(CHAVE_SESSAO) !== null;
+    } catch {
+      return false;
+    }
+  }
 
   /** Guarda a sessão. "Lembrar de mim" = localStorage (sobrevive ao fechar o navegador). */
   startSession(resposta: LoginResponse, lembrar: boolean): void {

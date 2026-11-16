@@ -63,6 +63,36 @@ export interface PacienteAtendido {
   motivo: string;
 }
 
+/** Ficha do paciente. cpf, dataNascimento e telefone são null até ele preencher. */
+export interface FichaPaciente {
+  nome: string;
+  email: string;
+  cpf: string | null;
+  dataNascimento: string | null;
+  telefone: string | null;
+}
+
+/** CPF e telefone vão só com dígitos (sem máscara). */
+export interface AtualizarFichaRequest {
+  nome: string;
+  cpf: string;
+  dataNascimento: string;
+  telefone: string | null;
+}
+
+/** Resultado da busca de paciente por e-mail: só o necessário para o médico confirmar quem é. */
+export interface PacienteBusca {
+  id: number;
+  nome: string;
+}
+
+export interface NovoAtendimentoRequest {
+  pacienteId: number;
+  data: string;
+  local: string;
+  motivo: string;
+}
+
 export interface NovaReceitaRequest {
   pacienteId: number;
   medicamentos: Medicamento[];

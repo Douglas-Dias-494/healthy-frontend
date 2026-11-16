@@ -1,0 +1,93 @@
+<header class="page-header">
+  <h1>Registrar atendimento</h1>
+  <p>Registre uma consulta. Isso associa o paciente a você e libera a emissão de receitas para ele.</p>
+</header>
+
+<div class="atendimento">
+  @if (registered(); as done) {
+    <div class="alert alert--success" role="status">
+      <p class="confirmacao">Atendimento de <strong>{{ done.nome }}</strong> registrado.</p>
+      <a class="btn btn--ghost btn--sm" routerLink="/medico/nova-receita" [queryParams]="{ pacienteId: done.id }">
+        Emitir receita para {{ done.nome }}
+      </a>
+    </div>
+  }
+
+  <!-- Passo 1: achar o paciente -->
+  <section class="card">
+    <h2 class="card__title">1. Paciente</h2>
+
+    @if (patient(); as found) {
+      <div class="row row--between encontrado">
+        <p><strong>{{ found.nome }}</strong></p>
+        <button class="btn btn--ghost btn--sm" type="button" (click)="changePatient()">Trocar paciente</button>
+      </div>
+    } @else {
+      <p class="card__subtitle">Digite o e-mail exato da conta do paciente.</p>
+
+      <form class="busca" [formGroup]="searchForm" (ngSubmit)="searchPatient()" novalidate>
+        <div class="field busca__campo">
+          <label class="field__label" for="emailPaciente">E-mail do paciente</label>
+          <input class="field__input" id="emailPaciente" type="email" autocomplete="off" formControlName="email" placeholder="paciente@email.com" />
+          @if (searchForm.controls.email.touched && searchForm.controls.email.hasError('required')) {
+            <p class="field__error" role="alert">Informe o e-mail.</p>
+          } @else if (searchForm.controls.email.touched && searchForm.controls.email.hasError('email')) {
+            <p class="field__error" role="alert">Informe um e-mail válido.</p>
+          }
+        </div>
+        <button class="btn btn--primary" type="submit" [disabled]="searching()" [class.is-loading]="searching()">
+          Buscar
+        </button>
+      </form>
+
+      @if (searchError(); as message) {
+        <p class="alert alert--error" role="alert">{{ message }}</p>
+      }
+    }
+  </section>
+
+  <!-- Passo 2: dados do atendimento (só depois de achar o paciente) -->
+  @if (patient()) {
+    <section class="card">
+      <h2 class="card__title">2. Dados do atendimento</h2>
+
+      <form class="dados" [formGroup]="appointmentForm" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label class="field__label" for="data">Data do atendimento</label>
+          <input class="field__input" id="data" type="date" [max]="today" formControlName="data" />
+          @if (appointmentForm.controls.data.touched && appointmentForm.controls.data.hasError('required')) {
+            <p class="field__error" role="alert">Informe a data.</p>
+          } @else if (appointmentForm.controls.data.touched && appointmentForm.controls.data.hasError('future')) {
+            <p class="field__error" role="alert">O atendimento já precisa ter acontecido: a data não pode ser futura.</p>
+          }
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="local">Local</label>
+          <input class="field__input" id="local" type="text" formControlName="local" placeholder="Ex.: Clínica Vida — São Paulo, SP" />
+          @if (appointmentForm.controls.local.touched && appointmentForm.controls.local.invalid) {
+            <p class="field__error" role="alert">Informe o local do atendimento.</p>
+          }
+        </div>
+
+        <div class="field">
+          <label class="field__label" for="motivo">Motivo da consulta</label>
+          <input class="field__input" id="motivo" type="text" formControlName="motivo" placeholder="Ex.: Dor de garganta e febre" />
+          @if (appointmentForm.controls.motivo.touched && appointmentForm.controls.motivo.invalid) {
+            <p class="field__error" role="alert">Informe o motivo.</p>
+          }
+        </div>
+
+        @if (saveError(); as message) {
+          <p class="alert alert--error" role="alert">{{ message }}</p>
+        }
+
+        <div class="row">
+          <button class="btn btn--primary" type="submit" [disabled]="saving()" [class.is-loading]="saving()">
+            Registrar atendimento
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+</div>
