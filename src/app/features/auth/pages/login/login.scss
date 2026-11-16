@@ -1,0 +1,416 @@
+:host {
+  display: block;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Layout geral: 2 colunas ---------- */
+.login {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ---------- Lado da marca ---------- */
+.login__brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  padding: 4rem;
+  color: var(--color-text-on-primary);
+  background: linear-gradient(150deg, var(--color-primary-dark) 0%, var(--color-primary) 55%, var(--color-accent) 130%);
+}
+
+.login__tagline {
+  margin: 1.5rem 0 0;
+  max-width: 18ch;
+  font-size: 2.25rem;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.login__lead {
+  margin: 0;
+  max-width: 40ch;
+  font-size: 1.05rem;
+  opacity: 0.9;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand__logo {
+  width: 2rem;
+  height: 2rem;
+}
+
+.brand__name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Logo que aparece só no celular (o painel da marca some) */
+.brand--mobile {
+  display: none;
+  margin-bottom: 1.5rem;
+  color: var(--color-primary);
+}
+
+/* ---------- Lado do formulário ---------- */
+.login__panel {
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem;
+  background: var(--color-bg);
+}
+
+.form-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 2.25rem;
+  background: var(--color-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.form-card__title {
+  margin: 0;
+  font-size: 1.6rem;
+  line-height: 1.25;
+}
+
+.form-card__subtitle {
+  margin: 0.25rem 0 1.75rem;
+  color: var(--color-text-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+/* ---------- Seletor de perfil (radios estilizados) ---------- */
+.role {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.25rem;
+  border: 0;
+  background: var(--color-primary-soft);
+  border-radius: var(--radius-md);
+}
+
+.role__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.role__option {
+  padding: 0.6rem 0;
+  text-align: center;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    color var(--transition);
+}
+
+.role__input:checked + .role__option {
+  background: var(--color-surface);
+  color: var(--color-primary-dark);
+  box-shadow: 0 1px 3px rgba(18, 52, 59, 0.12);
+}
+
+.role__input:focus-visible + .role__option {
+  box-shadow: var(--focus-ring);
+}
+
+/* ---------- Campos ---------- */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.field__control {
+  position: relative;
+}
+
+.field__icon {
+  position: absolute;
+  top: 50%;
+  left: 0.9rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.field__input {
+  width: 100%;
+  height: 3rem;
+  padding: 0 0.9rem 0 2.7rem;
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  transition:
+    border-color var(--transition),
+    box-shadow var(--transition);
+
+  &::placeholder {
+    color: #9bb0b8;
+  }
+
+  &:hover {
+    border-color: #b6cbd1;
+  }
+
+  &:focus {
+    border-color: var(--color-primary);
+    box-shadow: var(--focus-ring);
+  }
+
+  /* Classes que o Angular Forms adiciona sozinho quando você ligar o formControlName */
+  &.ng-touched.ng-invalid {
+    border-color: var(--color-danger);
+    background: var(--color-danger-soft);
+  }
+}
+
+.field__input--with-action {
+  padding-right: 3rem;
+}
+
+.field__action {
+  position: absolute;
+  top: 50%;
+  right: 0.4rem;
+  display: grid;
+  place-items: center;
+  width: 2.2rem;
+  height: 2.2rem;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+
+  svg {
+    width: 1.15rem;
+    height: 1.15rem;
+  }
+
+  &:hover {
+    color: var(--color-primary-dark);
+    background: var(--color-primary-soft);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+}
+
+.field__error {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--color-danger);
+}
+
+/* ---------- Lembrar de mim / esqueci a senha ---------- */
+.form__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.check__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.check__box {
+  display: grid;
+  place-items: center;
+  width: 1.15rem;
+  height: 1.15rem;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: 5px;
+  transition:
+    background var(--transition),
+    border-color var(--transition);
+
+  &::after {
+    content: '';
+    width: 0.3rem;
+    height: 0.6rem;
+    margin-top: -2px;
+    border: solid var(--color-text-on-primary);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg) scale(0);
+    transition: transform var(--transition);
+  }
+}
+
+.check__input:checked + .check__box {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+
+  &::after {
+    transform: rotate(45deg) scale(1);
+  }
+}
+
+.check__input:focus-visible + .check__box {
+  box-shadow: var(--focus-ring);
+}
+
+/* ---------- Links ---------- */
+.link {
+  color: var(--color-accent);
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.link--strong {
+  font-weight: 600;
+}
+
+/* ---------- Alerta geral do formulário ---------- */
+.form__alert {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  font-size: 0.9rem;
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+  border-radius: var(--radius-md);
+}
+
+/* ---------- Botão ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 3rem;
+  padding: 0 1.25rem;
+  font-weight: 600;
+  border: 0;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition:
+    background var(--transition),
+    transform var(--transition),
+    opacity var(--transition);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  /* Spinner: ative adicionando a classe .is-loading no botão */
+  &.is-loading .btn__label {
+    opacity: 0.7;
+  }
+
+  &.is-loading::before {
+    content: '';
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    border-top-color: var(--color-text-on-primary);
+    border-radius: 50%;
+    animation: spin 700ms linear infinite;
+  }
+}
+
+.btn--primary {
+  color: var(--color-text-on-primary);
+  background: var(--color-primary);
+
+  &:hover:not(:disabled) {
+    background: var(--color-primary-dark);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(1px);
+  }
+}
+
+.form__footer {
+  margin: 0.25rem 0 0;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Responsivo ---------- */
+@media (max-width: 860px) {
+  .login {
+    grid-template-columns: 1fr;
+  }
+
+  .login__brand {
+    display: none;
+  }
+
+  .brand--mobile {
+    display: flex;
+  }
+
+  .form-card {
+    padding: 1.75rem 1.25rem;
+  }
+}

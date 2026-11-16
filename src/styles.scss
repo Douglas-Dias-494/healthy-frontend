@@ -1,0 +1,63 @@
+/* ==========================================================
+   Healthy — estilos globais e design tokens
+   Use sempre var(--token) nos componentes, nunca cores soltas.
+   ========================================================== */
+
+:root {
+  /* Marca: verde-azulado (saúde, calma, confiança) */
+  --color-primary: #0f9d8a;
+  --color-primary-dark: #0a7b6c;
+  --color-primary-soft: #e3f5f2;
+  --color-accent: #2f80ed; /* azul de apoio: links e destaques */
+
+  /* Texto */
+  --color-text: #12343b;
+  --color-text-muted: #5b7480;
+  --color-text-on-primary: #ffffff;
+
+  /* Superfícies */
+  --color-bg: #f3f8f9;
+  --color-surface: #ffffff;
+  --color-border: #d3e1e5;
+
+  /* Feedback */
+  --color-danger: #d64545;
+  --color-danger-soft: #fdeeee;
+  --color-success: #2e9d5b;
+
+  /* Forma e movimento */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px rgba(18, 52, 59, 0.08);
+  --focus-ring: 0 0 0 3px rgba(15, 157, 138, 0.28);
+  --transition: 150ms ease;
+
+  --font-sans: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+}
