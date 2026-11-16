@@ -3,7 +3,9 @@
   <p>Receitas digitais aprovadas pelos seus médicos.</p>
 </header>
 
-@if (receitas(); as lista) {
+@if (receitas.error(); as message) {
+  <p class="alert alert--error" role="alert">{{ message }}</p>
+} @else if (receitas.data(); as lista) {
   @if (lista.length === 0) {
     <p class="empty">Você ainda não recebeu nenhuma receita.</p>
   } @else {

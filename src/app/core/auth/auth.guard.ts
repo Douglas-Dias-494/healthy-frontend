@@ -8,12 +8,12 @@ import { AuthService } from './auth.service';
  * - Sem login: manda para /login.
  * - Perfil errado (médico tentando abrir /paciente): manda para a área dele.
  *
- * Uso na rota: canActivate: [perfilGuard('PACIENTE')]
+ * Uso na rota: canActivate: [profileGuard('PACIENTE')]
  *
  * IMPORTANTE: isto é só conforto de navegação. Quem protege os dados de verdade
  * é o backend, que precisa validar o token e o perfil em CADA endpoint.
  */
-export const perfilGuard =
+export const profileGuard =
   (perfilPermitido: Perfil): CanActivateFn =>
   () => {
     const usuario = inject(AuthService).usuario();

@@ -18,7 +18,7 @@ import { CadastroRequest, Perfil } from '../../../../core/models/auth.model';
  * Validadores de campo só enxergam o próprio valor; para comparar senha com confirmação
  * é preciso validar o grupo inteiro. O erro fica em form.errors (e não no campo).
  */
-const senhasIguais: ValidatorFn = (grupo: AbstractControl): ValidationErrors | null => {
+const passwordsMatch: ValidatorFn = (grupo: AbstractControl): ValidationErrors | null => {
   const senha = grupo.get('senha')?.value;
   const confirmacao = grupo.get('confirmarSenha')?.value;
   return senha === confirmacao ? null : { senhasDiferentes: true };
@@ -45,7 +45,7 @@ export class Cadastro {
       crm: [''],
       especialidade: [''],
     },
-    { validators: senhasIguais },
+    { validators: passwordsMatch },
   );
 
   // valueChanges é um Observable; toSignal o transforma em signal para usar no template e no computed
@@ -87,7 +87,7 @@ export class Cadastro {
     const dados: CadastroRequest = this.ehMedico() ? { ...basico, crm, especialidade } : basico;
 
     this.auth
-      .cadastrar(dados)
+      .signUp(dados)
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: () => this.sucesso.set(true),

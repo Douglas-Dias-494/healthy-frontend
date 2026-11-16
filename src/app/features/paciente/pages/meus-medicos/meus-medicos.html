@@ -4,7 +4,9 @@
 </header>
 
 <!-- undefined = ainda carregando | lista vazia = sem consultas | lista com itens = mostra os cartões -->
-@if (atendimentos(); as lista) {
+@if (atendimentos.error(); as message) {
+  <p class="alert alert--error" role="alert">{{ message }}</p>
+} @else if (atendimentos.data(); as lista) {
   @if (lista.length === 0) {
     <p class="empty">Você ainda não tem consultas registradas.</p>
   } @else {

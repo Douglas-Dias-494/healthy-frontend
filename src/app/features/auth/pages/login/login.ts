@@ -34,7 +34,7 @@ export class Login {
   protected readonly erro = signal<string | null>(null);
 
   // Inverte o valor atual: false vira true e true vira false
-  protected alternarSenha(): void {
+  protected togglePassword(): void {
     this.mostrarSenha.update((valorAtual) => !valorAtual);
   }
 
@@ -57,14 +57,15 @@ export class Login {
       .subscribe({
         next: (resposta) => {
           // Guarda quem entrou. "Lembrar de mim" marcado = fica salvo mesmo fechando o navegador
-          this.auth.iniciarSessao(resposta, this.form.controls.lembrar.value);
+          this.auth.startSession(resposta, this.form.controls.lembrar.value);
 
           // 4) Sucesso: cada perfil vai para a sua área
           const destino = resposta.perfil === 'MEDICO' ? '/medico' : '/paciente';
           this.router.navigate([destino]);
         },
-        // Mesma mensagem para qualquer falha: não revela se o e-mail existe
-        error: () => this.erro.set('E-mail ou senha incorretos'),
+        // A mensagem vem do AuthService: "E-mail ou senha incorretos." (o backend usa a mesma para
+        // qualquer falha, sem revelar se o e-mail existe) ou "não foi possível conectar" se a API estiver fora
+        error: (e: Error) => this.erro.set(e.message),
       });
   }
 }

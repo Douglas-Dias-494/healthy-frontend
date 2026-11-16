@@ -7,13 +7,15 @@
   <p class="alert alert--success aviso" role="status">Receita enviada ao paciente com sucesso.</p>
 }
 
-@if (pacientes(); as lista) {
+@if (pacientes.error(); as message) {
+  <p class="alert alert--error" role="alert">{{ message }}</p>
+} @else if (pacientes.data(); as lista) {
   @if (lista.length === 0) {
     <p class="empty">
       Você ainda não tem pacientes associados. Só é possível emitir receita para quem você atendeu.
     </p>
   } @else {
-    <form class="card formulario" [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+    <form class="card formulario" [formGroup]="form" (ngSubmit)="submit()" novalidate>
       <!-- Paciente -->
       <div class="field">
         <label class="field__label" for="paciente">Paciente</label>
@@ -37,7 +39,7 @@
             <div class="row row--between">
               <h2 class="medicamento__titulo">Medicamento {{ i + 1 }}</h2>
               @if (form.controls.medicamentos.length > 1) {
-                <button class="btn btn--danger btn--sm" type="button" (click)="removerMedicamento(i)">Remover</button>
+                <button class="btn btn--danger btn--sm" type="button" (click)="removeMedication(i)">Remover</button>
               }
             </div>
 
@@ -83,7 +85,7 @@
           </div>
         }
 
-        <button class="btn btn--ghost btn--sm" type="button" (click)="adicionarMedicamento()">
+        <button class="btn btn--ghost btn--sm" type="button" (click)="addMedication()">
           + Adicionar medicamento
         </button>
       </fieldset>

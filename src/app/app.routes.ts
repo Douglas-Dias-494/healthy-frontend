@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { perfilGuard } from './core/auth/auth.guard';
+import { profileGuard } from './core/auth/auth.guard';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
@@ -20,14 +20,14 @@ export const routes: Routes = [
   // A rota pai desenha o Shell (menu) e aplica o guard; as filhas aparecem dentro do <router-outlet> dele.
   {
     path: 'paciente',
-    canActivate: [perfilGuard('PACIENTE')],
+    canActivate: [profileGuard('PACIENTE')],
     loadComponent: () => import('./shared/layout/shell/shell').then((m) => m.Shell),
     loadChildren: () =>
       import('./features/paciente/paciente.routes').then((m) => m.PACIENTE_ROUTES),
   },
   {
     path: 'medico',
-    canActivate: [perfilGuard('MEDICO')],
+    canActivate: [profileGuard('MEDICO')],
     loadComponent: () => import('./shared/layout/shell/shell').then((m) => m.Shell),
     loadChildren: () => import('./features/medico/medico.routes').then((m) => m.MEDICO_ROUTES),
   },

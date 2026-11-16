@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 
 /**
- * Rotas filhas de /paciente. O Shell (menu) e o perfilGuard ficam na rota pai, em app.routes.ts.
+ * Rotas filhas de /paciente. O Shell (menu) e o profileGuard ficam na rota pai, em app.routes.ts.
  * As páginas são carregadas sob demanda (lazy loading).
  */
 export const PACIENTE_ROUTES: Routes = [

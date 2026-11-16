@@ -3,7 +3,9 @@
   <p>Pacientes associados a você, com os dados do último atendimento.</p>
 </header>
 
-@if (pacientes(); as lista) {
+@if (pacientes.error(); as message) {
+  <p class="alert alert--error" role="alert">{{ message }}</p>
+} @else if (pacientes.data(); as lista) {
   @if (lista.length === 0) {
     <p class="empty">Você ainda não tem pacientes associados.</p>
   } @else {

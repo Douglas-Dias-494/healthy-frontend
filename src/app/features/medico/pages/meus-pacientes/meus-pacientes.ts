@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { loadable } from '../../../../core/utils/loadable';
 import { RouterLink } from '@angular/router';
 import { IniciaisPipe } from '../../../../shared/pipes/iniciais.pipe';
 import { MedicoService } from '../../medico.service';
@@ -14,5 +14,5 @@ import { MedicoService } from '../../medico.service';
 export class MeusPacientes {
   private readonly service = inject(MedicoService);
 
-  protected readonly pacientes = toSignal(this.service.listarPacientes());
+  protected readonly pacientes = loadable(this.service.listPatients());
 }

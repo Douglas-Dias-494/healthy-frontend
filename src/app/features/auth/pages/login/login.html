@@ -68,7 +68,7 @@
             <!-- [type] troca entre "text" e "password" conforme o signal mostrarSenha() -->
             <input class="field__input field__input--with-action" formControlName="senha" id="senha" [type]="mostrarSenha() ? 'text' : 'password'" autocomplete="current-password" placeholder="Sua senha" />
             <!-- (click) chama o método; [attr.aria-label] muda o texto lido por leitores de tela -->
-            <button class="field__action" type="button" (click)="alternarSenha()" [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'">
+            <button class="field__action" type="button" (click)="togglePassword()" [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 @if (mostrarSenha()) {
                   <!-- olho riscado: a senha está visível, clicar oculta -->

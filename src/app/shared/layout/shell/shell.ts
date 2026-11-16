@@ -39,7 +39,7 @@ export class Shell {
   );
   protected readonly inicio = computed(() => this.menu()[0].caminho);
 
-  protected sair(): void {
-    this.auth.encerrarSessao();
+  protected signOut(): void {
+    this.auth.endSession();
   }
 }

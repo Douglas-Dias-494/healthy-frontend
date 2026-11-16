@@ -3,6 +3,11 @@
   <p>Ative o acompanhamento para controlar a data de início e quantas unidades ainda restam.</p>
 </header>
 
+<!-- Falha ao carregar (receitas ou acompanhamentos) ou ao registrar dose / encerrar -->
+@if (receitas.error() ?? pageError(); as message) {
+  <p class="alert alert--error" role="alert">{{ message }}</p>
+}
+
 <!-- ============ Em acompanhamento ============ -->
 <h2 class="section-title">Em acompanhamento</h2>
 
@@ -31,14 +36,14 @@
             [attr.aria-valuemax]="item.quantidadeTotal"
             [attr.aria-valuenow]="item.quantidadeRestante"
           >
-            <span [style.width.%]="percentual(item)"></span>
+            <span [style.width.%]="percentage(item)"></span>
           </div>
 
           <div class="row acoes">
-            <button class="btn btn--primary btn--sm" type="button" [disabled]="item.quantidadeRestante === 0" (click)="registrarDose(item)">
+            <button class="btn btn--primary btn--sm" type="button" [disabled]="item.quantidadeRestante === 0" (click)="registerDose(item)">
               Tomei 1
             </button>
-            <button class="btn btn--danger btn--sm" type="button" (click)="encerrar(item)">Encerrar</button>
+            <button class="btn btn--danger btn--sm" type="button" (click)="endTracking(item)">Encerrar</button>
           </div>
         </li>
       }
@@ -56,7 +61,7 @@
     <p class="empty">Todos os remédios das suas receitas já estão em acompanhamento.</p>
   } @else {
     <ul class="stack">
-      @for (item of itens; track chave(item)) {
+      @for (item of itens; track itemKey(item)) {
         <li class="card">
           <div class="row row--between">
             <div>
@@ -67,16 +72,16 @@
               </p>
             </div>
 
-            @if (abertoChave() !== chave(item)) {
-              <button class="btn btn--primary btn--sm" type="button" (click)="abrirAtivacao(item)">
+            @if (abertoChave() !== itemKey(item)) {
+              <button class="btn btn--primary btn--sm" type="button" (click)="openActivation(item)">
                 Ativar acompanhamento
               </button>
             }
           </div>
 
           <!-- Formulário aparece só no remédio escolhido -->
-          @if (abertoChave() === chave(item)) {
-            <form class="ativar" [formGroup]="form" (ngSubmit)="confirmarAtivacao(item)" novalidate>
+          @if (abertoChave() === itemKey(item)) {
+            <form class="ativar" [formGroup]="form" (ngSubmit)="confirmActivation(item)" novalidate>
               <div class="form-grid">
                 <div class="field">
                   <label class="field__label" for="dataInicio">Data de início</label>
@@ -103,7 +108,7 @@
                 <button class="btn btn--primary btn--sm" type="submit" [disabled]="salvando()" [class.is-loading]="salvando()">
                   Confirmar
                 </button>
-                <button class="btn btn--ghost btn--sm" type="button" (click)="cancelarAtivacao()">Cancelar</button>
+                <button class="btn btn--ghost btn--sm" type="button" (click)="cancelActivation()">Cancelar</button>
               </div>
             </form>
           }

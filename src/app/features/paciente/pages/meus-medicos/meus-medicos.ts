@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { loadable } from '../../../../core/utils/loadable';
 import { IniciaisPipe } from '../../../../shared/pipes/iniciais.pipe';
 import { PacienteService } from '../../paciente.service';
 
@@ -12,7 +12,7 @@ import { PacienteService } from '../../paciente.service';
 export class MeusMedicos {
   private readonly service = inject(PacienteService);
 
-  // toSignal assina o Observable e entrega o resultado como signal.
-  // Enquanto a resposta não chega, o valor é undefined (usamos isso para mostrar "Carregando").
-  protected readonly atendimentos = toSignal(this.service.listarAtendimentos());
+  // loadable() assina o Observable e entrega dois signals: data e error.
+  // Enquanto a resposta não chega, data() é undefined (usamos isso para mostrar "Carregando").
+  protected readonly atendimentos = loadable(this.service.listAppointments());
 }

@@ -1,5 +1,5 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { loadable } from '../../../../core/utils/loadable';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { finalize } from 'rxjs';
 import { MedicoService } from '../../medico.service';
@@ -21,7 +21,7 @@ export class NovaReceita {
    */
   readonly pacienteId = input<string>();
 
-  protected readonly pacientes = toSignal(this.service.listarPacientes());
+  protected readonly pacientes = loadable(this.service.listPatients());
   protected readonly enviando = signal(false);
   protected readonly erro = signal<string | null>(null);
   protected readonly sucesso = signal(false);
@@ -30,7 +30,7 @@ export class NovaReceita {
     // null = nada selecionado ainda; o <select> usa [ngValue] para guardar o número do paciente
     pacienteId: [null as number | null, Validators.required],
     // FormArray: lista de FormGroups, um por medicamento. Cresce e diminui em tempo de execução.
-    medicamentos: this.fb.array([this.novoMedicamento()], Validators.minLength(1)),
+    medicamentos: this.fb.array([this.newMedication()], Validators.minLength(1)),
     observacoes: [''],
   });
 
@@ -45,7 +45,7 @@ export class NovaReceita {
   }
 
   /** Cria o grupo de campos de UM medicamento. */
-  private novoMedicamento() {
+  private newMedication() {
     return this.fb.nonNullable.group({
       nome: ['', Validators.required],
       dosagem: ['', Validators.required],
@@ -54,15 +54,15 @@ export class NovaReceita {
     });
   }
 
-  protected adicionarMedicamento(): void {
-    this.form.controls.medicamentos.push(this.novoMedicamento());
+  protected addMedication(): void {
+    this.form.controls.medicamentos.push(this.newMedication());
   }
 
-  protected removerMedicamento(indice: number): void {
+  protected removeMedication(indice: number): void {
     this.form.controls.medicamentos.removeAt(indice);
   }
 
-  protected enviar(): void {
+  protected submit(): void {
     this.sucesso.set(false);
 
     if (this.form.invalid) {
@@ -79,21 +79,21 @@ export class NovaReceita {
     this.erro.set(null);
 
     this.service
-      .emitirReceita({ pacienteId, medicamentos, observacoes })
+      .issuePrescription({ pacienteId, medicamentos, observacoes })
       .pipe(finalize(() => this.enviando.set(false)))
       .subscribe({
         next: () => {
           this.sucesso.set(true);
-          this.limparFormulario();
+          this.resetForm();
         },
         error: (e: Error) => this.erro.set(e.message),
       });
   }
 
-  private limparFormulario(): void {
+  private resetForm(): void {
     // Volta a UM medicamento vazio e zera estados de "tocado"/"alterado".
     this.form.controls.medicamentos.clear();
-    this.form.controls.medicamentos.push(this.novoMedicamento());
+    this.form.controls.medicamentos.push(this.newMedication());
     this.form.reset({ pacienteId: null, observacoes: '' });
   }
 }
