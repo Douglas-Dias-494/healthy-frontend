@@ -1,0 +1,115 @@
+<main class="cadastro">
+  <section class="cadastro__card">
+    <div class="marca">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1.1L12 21l7.8-7.5 1-1.1a5.5 5.5 0 0 0 0-7.8z" />
+        <path d="M3.5 12h4l2-3 3 6 2-3h6" />
+      </svg>
+      <span>Healthy</span>
+    </div>
+
+    @if (sucesso()) {
+      <!-- Depois de cadastrar, troca o formulário por esta confirmação -->
+      <h1 class="titulo">Conta criada!</h1>
+      <p class="alert alert--success" role="status">Seu cadastro foi concluído. Agora é só entrar.</p>
+      <a class="btn btn--primary entrar" routerLink="/login">Ir para o login</a>
+    } @else {
+      <h1 class="titulo">Criar conta</h1>
+      <p class="subtitulo">Escolha como você vai usar o Healthy.</p>
+
+      <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <!-- Perfil -->
+        <fieldset class="segmented">
+          <legend class="sr-only">Tipo de conta</legend>
+          <input class="segmented__input" type="radio" name="perfil" id="perfil-paciente" formControlName="perfil" value="PACIENTE" />
+          <label class="segmented__option" for="perfil-paciente">Sou paciente</label>
+
+          <input class="segmented__input" type="radio" name="perfil" id="perfil-medico" formControlName="perfil" value="MEDICO" />
+          <label class="segmented__option" for="perfil-medico">Sou médico</label>
+        </fieldset>
+
+        <!-- Nome -->
+        <div class="field">
+          <label class="field__label" for="nome">Nome completo</label>
+          <input class="field__input" id="nome" type="text" autocomplete="name" formControlName="nome" />
+          @if (form.controls.nome.touched && form.controls.nome.hasError('required')) {
+            <p class="field__error" role="alert">Informe seu nome.</p>
+          } @else if (form.controls.nome.touched && form.controls.nome.hasError('minlength')) {
+            <p class="field__error" role="alert">O nome precisa ter ao menos 3 letras.</p>
+          }
+        </div>
+
+        <!-- E-mail -->
+        <div class="field">
+          <label class="field__label" for="email">E-mail</label>
+          <input class="field__input" id="email" type="email" autocomplete="email" formControlName="email" placeholder="voce@email.com" />
+          @if (form.controls.email.touched && form.controls.email.hasError('required')) {
+            <p class="field__error" role="alert">Informe seu e-mail.</p>
+          } @else if (form.controls.email.touched && form.controls.email.hasError('email')) {
+            <p class="field__error" role="alert">Informe um e-mail válido.</p>
+          }
+        </div>
+
+        <!-- Só para médicos -->
+        @if (ehMedico()) {
+          <div class="form-grid">
+            <div class="field">
+              <label class="field__label" for="crm">CRM</label>
+              <input class="field__input" id="crm" type="text" formControlName="crm" placeholder="CRM-SP 123456" />
+              @if (form.controls.crm.touched && form.controls.crm.invalid) {
+                <p class="field__error" role="alert">Informe o CRM.</p>
+              }
+            </div>
+
+            <div class="field">
+              <label class="field__label" for="especialidade">Especialidade</label>
+              <input class="field__input" id="especialidade" type="text" formControlName="especialidade" placeholder="Cardiologia" />
+              @if (form.controls.especialidade.touched && form.controls.especialidade.invalid) {
+                <p class="field__error" role="alert">Informe a especialidade.</p>
+              }
+            </div>
+          </div>
+        }
+
+        <!-- Senha -->
+        <div class="form-grid">
+          <div class="field">
+            <label class="field__label" for="senha">Senha</label>
+            <input class="field__input" id="senha" type="password" autocomplete="new-password" formControlName="senha" />
+            @if (form.controls.senha.touched && form.controls.senha.hasError('required')) {
+              <p class="field__error" role="alert">Crie uma senha.</p>
+            } @else if (form.controls.senha.touched && form.controls.senha.hasError('minlength')) {
+              <p class="field__error" role="alert">A senha precisa ter ao menos 6 caracteres.</p>
+            } @else {
+              <span class="field__hint">Mínimo de 6 caracteres.</span>
+            }
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="confirmarSenha">Confirmar senha</label>
+            <input class="field__input" id="confirmarSenha" type="password" autocomplete="new-password" formControlName="confirmarSenha" />
+            <!-- O erro de "senhas diferentes" está no GRUPO (form), não no campo -->
+            @if (form.controls.confirmarSenha.touched && form.controls.confirmarSenha.hasError('required')) {
+              <p class="field__error" role="alert">Repita a senha.</p>
+            } @else if (form.controls.confirmarSenha.touched && form.hasError('senhasDiferentes')) {
+              <p class="field__error" role="alert">As senhas não conferem.</p>
+            }
+          </div>
+        </div>
+
+        @if (erro(); as mensagem) {
+          <p class="alert alert--error" role="alert">{{ mensagem }}</p>
+        }
+
+        <button class="btn btn--primary" type="submit" [disabled]="carregando()" [class.is-loading]="carregando()">
+          Criar conta
+        </button>
+
+        <p class="rodape">
+          Já tem conta?
+          <a class="link link--strong" routerLink="/login">Entrar</a>
+        </p>
+      </form>
+    }
+  </section>
+</main>

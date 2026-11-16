@@ -1,0 +1,33 @@
+<header class="page-header">
+  <h1>Meus médicos</h1>
+  <p>Profissionais com quem você já se consultou.</p>
+</header>
+
+<!-- undefined = ainda carregando | lista vazia = sem consultas | lista com itens = mostra os cartões -->
+@if (atendimentos(); as lista) {
+  @if (lista.length === 0) {
+    <p class="empty">Você ainda não tem consultas registradas.</p>
+  } @else {
+    <ul class="grid">
+      @for (atendimento of lista; track atendimento.id) {
+        <li class="card">
+          <div class="row">
+            <span class="avatar" aria-hidden="true">{{ atendimento.medico.nome | iniciais }}</span>
+            <div>
+              <h2 class="card__title">{{ atendimento.medico.nome }}</h2>
+              <p class="card__subtitle">{{ atendimento.medico.especialidade }}</p>
+            </div>
+          </div>
+
+          <ul class="meta">
+            <li><strong>CRM:</strong> {{ atendimento.medico.crm }}</li>
+            <li><strong>Consulta em:</strong> {{ atendimento.data | date: 'dd/MM/yyyy' }}</li>
+            <li><strong>Local:</strong> {{ atendimento.local }}</li>
+          </ul>
+        </li>
+      }
+    </ul>
+  }
+} @else {
+  <p class="loading">Carregando seus médicos…</p>
+}

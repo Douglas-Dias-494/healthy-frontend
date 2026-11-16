@@ -1,0 +1,110 @@
+<header class="page-header">
+  <h1>Nova receita</h1>
+  <p>Cadastre a receita digital. Ao enviar, ela é aprovada e fica disponível para o paciente.</p>
+</header>
+
+@if (sucesso()) {
+  <p class="alert alert--success aviso" role="status">Receita enviada ao paciente com sucesso.</p>
+}
+
+@if (pacientes(); as lista) {
+  @if (lista.length === 0) {
+    <p class="empty">
+      Você ainda não tem pacientes associados. Só é possível emitir receita para quem você atendeu.
+    </p>
+  } @else {
+    <form class="card formulario" [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+      <!-- Paciente -->
+      <div class="field">
+        <label class="field__label" for="paciente">Paciente</label>
+        <select class="field__input" id="paciente" formControlName="pacienteId">
+          <option [ngValue]="null" disabled>Selecione um paciente</option>
+          @for (paciente of lista; track paciente.id) {
+            <option [ngValue]="paciente.id">{{ paciente.nome }}</option>
+          }
+        </select>
+        @if (form.controls.pacienteId.touched && form.controls.pacienteId.invalid) {
+          <p class="field__error" role="alert">Selecione o paciente.</p>
+        }
+      </div>
+
+      <!-- Medicamentos (FormArray): um bloco por item, o médico adiciona e remove -->
+      <fieldset class="medicamentos" formArrayName="medicamentos">
+        <legend class="medicamentos__titulo">Medicamentos</legend>
+
+        @for (grupo of form.controls.medicamentos.controls; track grupo; let i = $index) {
+          <div class="medicamento" [formGroupName]="i">
+            <div class="row row--between">
+              <h2 class="medicamento__titulo">Medicamento {{ i + 1 }}</h2>
+              @if (form.controls.medicamentos.length > 1) {
+                <button class="btn btn--danger btn--sm" type="button" (click)="removerMedicamento(i)">Remover</button>
+              }
+            </div>
+
+            <div class="form-grid">
+              <div class="field">
+                <label class="field__label" [for]="'nome-' + i">Nome</label>
+                <input class="field__input" [id]="'nome-' + i" type="text" formControlName="nome" placeholder="Ex.: Dipirona" />
+                @if (grupo.controls.nome.touched && grupo.controls.nome.invalid) {
+                  <p class="field__error" role="alert">Informe o nome.</p>
+                }
+              </div>
+
+              <div class="field">
+                <label class="field__label" [for]="'dosagem-' + i">Dosagem</label>
+                <input class="field__input" [id]="'dosagem-' + i" type="text" formControlName="dosagem" placeholder="Ex.: 500 mg" />
+                @if (grupo.controls.dosagem.touched && grupo.controls.dosagem.invalid) {
+                  <p class="field__error" role="alert">Informe a dosagem.</p>
+                }
+              </div>
+
+              <div class="field">
+                <label class="field__label" [for]="'quantidade-' + i">Quantidade (unidades)</label>
+                <input class="field__input" [id]="'quantidade-' + i" type="number" min="1" formControlName="quantidade" />
+                @if (grupo.controls.quantidade.touched && grupo.controls.quantidade.invalid) {
+                  <p class="field__error" role="alert">Informe 1 ou mais.</p>
+                }
+              </div>
+            </div>
+
+            <div class="field">
+              <label class="field__label" [for]="'instrucoes-' + i">Como tomar</label>
+              <textarea
+                class="field__input"
+                [id]="'instrucoes-' + i"
+                rows="2"
+                formControlName="instrucoes"
+                placeholder="Ex.: 1 comprimido a cada 8 horas por 7 dias"
+              ></textarea>
+              @if (grupo.controls.instrucoes.touched && grupo.controls.instrucoes.invalid) {
+                <p class="field__error" role="alert">Informe as instruções de uso.</p>
+              }
+            </div>
+          </div>
+        }
+
+        <button class="btn btn--ghost btn--sm" type="button" (click)="adicionarMedicamento()">
+          + Adicionar medicamento
+        </button>
+      </fieldset>
+
+      <!-- Observações -->
+      <div class="field">
+        <label class="field__label" for="observacoes">Observações (opcional)</label>
+        <textarea class="field__input" id="observacoes" rows="3" formControlName="observacoes" placeholder="Recomendações gerais ao paciente"></textarea>
+      </div>
+
+      @if (erro(); as mensagem) {
+        <p class="alert alert--error" role="alert">{{ mensagem }}</p>
+      }
+
+      <div class="row">
+        <button class="btn btn--primary" type="submit" [disabled]="enviando()" [class.is-loading]="enviando()">
+          Aprovar e enviar ao paciente
+        </button>
+      </div>
+    </form>
+  }
+} @else {
+  <p class="loading">Carregando…</p>
+}

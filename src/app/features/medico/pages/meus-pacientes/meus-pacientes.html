@@ -1,0 +1,47 @@
+<header class="page-header">
+  <h1>Meus pacientes</h1>
+  <p>Pacientes associados a você, com os dados do último atendimento.</p>
+</header>
+
+@if (pacientes(); as lista) {
+  @if (lista.length === 0) {
+    <p class="empty">Você ainda não tem pacientes associados.</p>
+  } @else {
+    <div class="table-wrap">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Paciente</th>
+            <th>Atendimento</th>
+            <th>Local</th>
+            <th>Motivo</th>
+            <th><span class="sr-only">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (paciente of lista; track paciente.id) {
+            <tr>
+              <td>
+                <div class="row">
+                  <span class="avatar avatar--sm" aria-hidden="true">{{ paciente.nome | iniciais }}</span>
+                  <strong>{{ paciente.nome }}</strong>
+                </div>
+              </td>
+              <td>{{ paciente.dataAtendimento | date: 'dd/MM/yyyy' }}</td>
+              <td>{{ paciente.local }}</td>
+              <td>{{ paciente.motivo }}</td>
+              <td>
+                <!-- queryParams vira ?pacienteId=... e chega no input() da tela de nova receita -->
+                <a class="btn btn--ghost btn--sm" routerLink="/medico/nova-receita" [queryParams]="{ pacienteId: paciente.id }">
+                  Nova receita
+                </a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+} @else {
+  <p class="loading">Carregando seus pacientes…</p>
+}

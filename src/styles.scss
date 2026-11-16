@@ -3,6 +3,9 @@
    Use sempre var(--token) nos componentes, nunca cores soltas.
    ========================================================== */
 
+/* Peças reutilizáveis (botões, campos, cartões...) */
+@use './styles/ui';
+
 :root {
   /* Marca: verde-azulado (saúde, calma, confiança) */
   --color-primary: #0f9d8a;

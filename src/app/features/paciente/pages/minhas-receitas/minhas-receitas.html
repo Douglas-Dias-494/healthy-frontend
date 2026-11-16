@@ -1,0 +1,44 @@
+<header class="page-header">
+  <h1>Receitas</h1>
+  <p>Receitas digitais aprovadas pelos seus médicos.</p>
+</header>
+
+@if (receitas(); as lista) {
+  @if (lista.length === 0) {
+    <p class="empty">Você ainda não recebeu nenhuma receita.</p>
+  } @else {
+    <ul class="stack">
+      @for (receita of lista; track receita.id) {
+        <li class="card">
+          <div class="row row--between">
+            <div>
+              <h2 class="card__title">Receita de {{ receita.data | date: 'dd/MM/yyyy' }}</h2>
+              <p class="card__subtitle">
+                {{ receita.medico.nome }} · {{ receita.medico.especialidade }} · {{ receita.medico.crm }}
+              </p>
+            </div>
+            <span class="badge badge--success">Aprovada pelo médico</span>
+          </div>
+
+          <ul class="itens">
+            @for (medicamento of receita.medicamentos; track $index) {
+              <li>
+                <strong>{{ medicamento.nome }} {{ medicamento.dosagem }}</strong>
+                <span class="itens__qtd">{{ medicamento.quantidade }} unidades</span>
+                <span class="itens__instrucoes">{{ medicamento.instrucoes }}</span>
+              </li>
+            }
+          </ul>
+
+          @if (receita.observacoes) {
+            <p class="observacoes"><strong>Observações:</strong> {{ receita.observacoes }}</p>
+          }
+
+          <a class="btn btn--ghost btn--sm" routerLink="/paciente/remedios">Acompanhar estes remédios</a>
+        </li>
+      }
+    </ul>
+  }
+} @else {
+  <p class="loading">Carregando suas receitas…</p>
+}
