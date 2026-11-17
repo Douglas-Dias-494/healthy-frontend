@@ -27,6 +27,6 @@ jobs:
       - name: Production build
         run: npm run build
 
-      # Falha o CI se alguma dependência de produção tiver vulnerabilidade conhecida de gravidade alta
+      # Fails if a production dependency has a known high-severity vulnerability
       - name: Audit production dependencies
         run: npm audit --omit=dev --audit-level=high

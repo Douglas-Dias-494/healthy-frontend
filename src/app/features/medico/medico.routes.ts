@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-/** Rotas filhas de /medico (o Shell e o profileGuard ficam na rota pai, em app.routes.ts). */
 export const MEDICO_ROUTES: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'pacientes' },
   {

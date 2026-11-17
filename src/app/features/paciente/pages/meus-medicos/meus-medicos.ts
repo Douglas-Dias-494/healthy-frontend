@@ -12,7 +12,5 @@ import { PacienteService } from '../../paciente.service';
 export class MeusMedicos {
   private readonly service = inject(PacienteService);
 
-  // loadable() assina o Observable e entrega dois signals: data e error.
-  // Enquanto a resposta não chega, data() é undefined (usamos isso para mostrar "Carregando").
   protected readonly atendimentos = loadable(this.service.listAppointments());
 }

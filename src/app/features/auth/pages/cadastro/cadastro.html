@@ -9,7 +9,6 @@
     </div>
 
     @if (sucesso()) {
-      <!-- Depois de signUp, troca o formulário por esta confirmação -->
       <h1 class="titulo">Conta criada!</h1>
       <p class="alert alert--success" role="status">Seu cadastro foi concluído. Agora é só entrar.</p>
       <a class="btn btn--primary entrar" routerLink="/login">Ir para o login</a>
@@ -18,7 +17,6 @@
       <p class="subtitulo">Escolha como você vai usar o Healthy.</p>
 
       <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-        <!-- Perfil -->
         <fieldset class="segmented">
           <legend class="sr-only">Tipo de conta</legend>
           <input class="segmented__input" type="radio" name="perfil" id="perfil-paciente" formControlName="perfil" value="PACIENTE" />
@@ -28,7 +26,6 @@
           <label class="segmented__option" for="perfil-medico">Sou médico</label>
         </fieldset>
 
-        <!-- Nome -->
         <div class="field">
           <label class="field__label" for="nome">Nome completo</label>
           <input class="field__input" id="nome" type="text" autocomplete="name" formControlName="nome" />
@@ -39,7 +36,6 @@
           }
         </div>
 
-        <!-- E-mail -->
         <div class="field">
           <label class="field__label" for="email">E-mail</label>
           <input class="field__input" id="email" type="email" autocomplete="email" formControlName="email" placeholder="voce@email.com" />
@@ -50,7 +46,6 @@
           }
         </div>
 
-        <!-- Só para médicos -->
         @if (ehMedico()) {
           <div class="form-grid">
             <div class="field">
@@ -71,7 +66,6 @@
           </div>
         }
 
-        <!-- Senha -->
         <div class="form-grid">
           <div class="field">
             <label class="field__label" for="senha">Senha</label>
@@ -88,7 +82,6 @@
           <div class="field">
             <label class="field__label" for="confirmarSenha">Confirmar senha</label>
             <input class="field__input" id="confirmarSenha" type="password" autocomplete="new-password" formControlName="confirmarSenha" />
-            <!-- O erro de "senhas diferentes" está no GRUPO (form), não no campo -->
             @if (form.controls.confirmarSenha.touched && form.controls.confirmarSenha.hasError('required')) {
               <p class="field__error" role="alert">Repita a senha.</p>
             } @else if (form.controls.confirmarSenha.touched && form.hasError('senhasDiferentes')) {

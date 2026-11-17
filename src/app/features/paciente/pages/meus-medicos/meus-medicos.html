@@ -3,7 +3,6 @@
   <p>Profissionais com quem você já se consultou.</p>
 </header>
 
-<!-- undefined = ainda carregando | lista vazia = sem consultas | lista com itens = mostra os cartões -->
 @if (atendimentos.error(); as message) {
   <p class="alert alert--error" role="alert">{{ message }}</p>
 } @else if (atendimentos.data(); as lista) {

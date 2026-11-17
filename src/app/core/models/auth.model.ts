@@ -18,8 +18,6 @@ export interface CadastroRequest {
   nome: string;
   email: string;
   senha: string;
-  /** Só para médicos */
   crm?: string;
-  /** Só para médicos */
   especialidade?: string;
 }

@@ -1,34 +1,24 @@
-/* ==========================================================
-   Healthy — estilos globais e design tokens
-   Use sempre var(--token) nos componentes, nunca cores soltas.
-   ========================================================== */
 
-/* Peças reutilizáveis (botões, campos, cartões...) */
 @use './styles/ui';
 
 :root {
-  /* Marca: verde-azulado (saúde, calma, confiança) */
   --color-primary: #0f9d8a;
   --color-primary-dark: #0a7b6c;
   --color-primary-soft: #e3f5f2;
-  --color-accent: #2f80ed; /* azul de apoio: links e destaques */
+  --color-accent: #2f80ed;
 
-  /* Texto */
   --color-text: #12343b;
   --color-text-muted: #5b7480;
   --color-text-on-primary: #ffffff;
 
-  /* Superfícies */
   --color-bg: #f3f8f9;
   --color-surface: #ffffff;
   --color-border: #d3e1e5;
 
-  /* Feedback */
   --color-danger: #d64545;
   --color-danger-soft: #fdeeee;
   --color-success: #2e9d5b;
 
-  /* Forma e movimento */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 20px;

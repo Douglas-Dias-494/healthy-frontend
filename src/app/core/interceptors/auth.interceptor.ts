@@ -4,17 +4,11 @@ import { catchError, throwError } from 'rxjs';
 import { API_URL } from '../api.config';
 import { AuthService } from '../auth/auth.service';
 
-/** Rotas públicas: nunca levam token (o login é justamente como se obtém um). */
 const PUBLIC_ROUTES = [`${API_URL}/auth/login`, `${API_URL}/auth/cadastro`];
 
 /**
- * Interceptor: passa por TODA requisição do HttpClient antes de ela sair (e por toda resposta).
- *
- * - Anexa o token JWT no cabeçalho "Authorization".
- * - Só anexa para a nossa API: nunca envie o token para sites de terceiros.
- * - Não anexa em login/cadastro: se o token guardado já venceu, enviá-lo faria o servidor recusar
- *   até o pedido de um novo login.
- * - Se o servidor responder 401 a uma chamada que levava token, a sessão venceu: encerra e volta ao login.
+ * Attaches the JWT to calls to our API only: never to other hosts, and never to login/sign-up (a stale
+ * token there would make the server reject the request). Ends the session if the API answers 401.
  */
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth = inject(AuthService);

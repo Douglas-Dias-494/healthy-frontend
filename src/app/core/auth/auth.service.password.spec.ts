@@ -83,7 +83,6 @@ describe('AuthService (password flows)', () => {
     await result;
 
     expect(service.usuario()?.token).toBe('token-novo');
-    // continua no mesmo lugar em que estava (sessionStorage, pois "lembrar" estava desligado)
     expect(sessionStorage.getItem('healthy.sessao')).toContain('token-novo');
     expect(localStorage.getItem('healthy.sessao')).toBeNull();
   });

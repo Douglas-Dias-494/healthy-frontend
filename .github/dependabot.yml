@@ -1,4 +1,4 @@
-# Abre pull requests sozinho quando uma dependência (ou ação do CI) tem versão nova ou correção de segurança.
+# Opens pull requests automatically when a dependency (or CI action) has a new version or a security fix.
 version: 2
 updates:
   - package-ecosystem: npm

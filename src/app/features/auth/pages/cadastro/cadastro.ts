@@ -24,15 +24,12 @@ export class Cadastro {
       email: ['', [Validators.required, Validators.email, Validators.maxLength(100)]],
       senha: ['', [Validators.required, strongPassword()]],
       confirmarSenha: ['', Validators.required],
-      // Só valem para médico; as regras são ligadas/desligadas no effect abaixo
       crm: [''],
       especialidade: [''],
     },
-    // Validador de GRUPO: compara dois campos (um validador de campo só enxerga o próprio valor)
     { validators: fieldsMatch('senha', 'confirmarSenha') },
   );
 
-  // valueChanges é um Observable; toSignal o transforma em signal para usar no template e no computed
   private readonly perfil = toSignal(this.form.controls.perfil.valueChanges, {
     initialValue: this.form.controls.perfil.value,
   });
@@ -43,7 +40,6 @@ export class Cadastro {
   protected readonly sucesso = signal(false);
 
   constructor() {
-    // Sempre que o perfil mudar: liga "obrigatório" em CRM/especialidade (médico) ou desliga (paciente).
     effect(() => {
       const medico = this.ehMedico();
       for (const campo of [this.form.controls.crm, this.form.controls.especialidade]) {
@@ -52,7 +48,7 @@ export class Cadastro {
         } else {
           campo.clearValidators();
         }
-        campo.reset(''); // limpa o valor e reavalia as regras
+        campo.reset('');
       }
     });
   }
@@ -66,7 +62,6 @@ export class Cadastro {
     this.carregando.set(true);
     this.erro.set(null);
 
-    // A confirmação de senha só serve para validar aqui: não vai para o backend.
     const { confirmarSenha: _confirmacao, crm, especialidade, ...basico } = this.form.getRawValue();
     const dados: CadastroRequest = this.ehMedico() ? { ...basico, crm, especialidade } : basico;
 
@@ -75,7 +70,6 @@ export class Cadastro {
       .pipe(finalize(() => this.carregando.set(false)))
       .subscribe({
         next: () => this.sucesso.set(true),
-        // Aqui revelar "e-mail já existe" é aceitável (o usuário precisa saber para tentar outro)
         error: (e: Error) => this.erro.set(e.message),
       });
   }

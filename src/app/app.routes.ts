@@ -4,7 +4,6 @@ import { profileGuard } from './core/auth/auth.guard';
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: 'login' },
 
-  // ---- Telas públicas ----
   {
     path: 'login',
     title: 'Entrar · Healthy',
@@ -28,8 +27,6 @@ export const routes: Routes = [
       import('./features/auth/pages/redefinir-senha/redefinir-senha').then((m) => m.RedefinirSenha),
   },
 
-  // ---- Áreas logadas ----
-  // A rota pai desenha o Shell (menu) e aplica o guard; as filhas aparecem dentro do <router-outlet> dele.
   {
     path: 'paciente',
     canActivate: [profileGuard('PACIENTE')],
@@ -44,6 +41,5 @@ export const routes: Routes = [
     loadChildren: () => import('./features/medico/medico.routes').then((m) => m.MEDICO_ROUTES),
   },
 
-  // Qualquer endereço desconhecido volta para o login
   { path: '**', redirectTo: 'login' },
 ];

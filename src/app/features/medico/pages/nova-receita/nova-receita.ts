@@ -14,11 +14,6 @@ export class NovaReceita {
   private readonly fb = inject(FormBuilder);
   private readonly service = inject(MedicoService);
 
-  /**
-   * Chega pela URL: /medico/nova-receita?pacienteId=5
-   * (withComponentInputBinding em app.config.ts liga o parâmetro ao input com o mesmo nome).
-   * Vem como texto e pode não existir.
-   */
   readonly pacienteId = input<string>();
 
   protected readonly pacientes = loadable(this.service.listPatients());
@@ -27,15 +22,12 @@ export class NovaReceita {
   protected readonly sucesso = signal(false);
 
   protected readonly form = this.fb.nonNullable.group({
-    // null = nada selecionado ainda; o <select> usa [ngValue] para guardar o número do paciente
     pacienteId: [null as number | null, Validators.required],
-    // FormArray: lista de FormGroups, um por medicamento. Cresce e diminui em tempo de execução.
     medicamentos: this.fb.array([this.newMedication()], Validators.minLength(1)),
     observacoes: [''],
   });
 
   constructor() {
-    // effect: roda quando o input muda. Aqui, pré-seleciona o paciente vindo da URL.
     effect(() => {
       const id = Number(this.pacienteId());
       if (id) {
@@ -44,7 +36,6 @@ export class NovaReceita {
     });
   }
 
-  /** Cria o grupo de campos de UM medicamento. */
   private newMedication() {
     return this.fb.nonNullable.group({
       nome: ['', Validators.required],
@@ -72,7 +63,7 @@ export class NovaReceita {
 
     const { pacienteId, medicamentos, observacoes } = this.form.getRawValue();
     if (pacienteId === null) {
-      return; // o validador required já impede, isto só tranquiliza o TypeScript
+      return;
     }
 
     this.enviando.set(true);
@@ -91,7 +82,6 @@ export class NovaReceita {
   }
 
   private resetForm(): void {
-    // Volta a UM medicamento vazio e zera estados de "tocado"/"alterado".
     this.form.controls.medicamentos.clear();
     this.form.controls.medicamentos.push(this.newMedication());
     this.form.reset({ pacienteId: null, observacoes: '' });

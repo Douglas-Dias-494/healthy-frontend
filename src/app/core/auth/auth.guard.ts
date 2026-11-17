@@ -3,16 +3,7 @@ import { CanActivateFn, Router } from '@angular/router';
 import { Perfil } from '../models/auth.model';
 import { AuthService } from './auth.service';
 
-/**
- * Protege uma área do app para um perfil específico.
- * - Sem login: manda para /login.
- * - Perfil errado (médico tentando abrir /paciente): manda para a área dele.
- *
- * Uso na rota: canActivate: [profileGuard('PACIENTE')]
- *
- * IMPORTANTE: isto é só conforto de navegação. Quem protege os dados de verdade
- * é o backend, que precisa validar o token e o perfil em CADA endpoint.
- */
+/** UI convenience only: the backend enforces permissions on every endpoint. */
 export const profileGuard =
   (perfilPermitido: Perfil): CanActivateFn =>
   () => {

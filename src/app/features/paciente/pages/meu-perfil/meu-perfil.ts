@@ -39,7 +39,6 @@ export class MeuPerfil {
   protected readonly success = signal(false);
 
   constructor() {
-    // Quando a ficha chega da API, preenche o formulário (CPF e telefone já formatados para leitura)
     effect(() => {
       const data = this.profile.data();
       if (data) {
@@ -69,7 +68,7 @@ export class MeuPerfil {
     this.service
       .updateProfile({
         nome: nome.trim(),
-        cpf: onlyDigits(cpfValue), // o servidor recebe só os dígitos
+        cpf: onlyDigits(cpfValue),
         dataNascimento,
         telefone: onlyDigits(telefone) || null,
       })

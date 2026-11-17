@@ -17,14 +17,14 @@ describe('AuthService', () => {
       providers: [
         provideRouter([{ path: 'login', children: [] }]),
         provideHttpClient(),
-        provideHttpClientTesting(), // troca o HTTP real por um "falso" controlado pelo teste
+        provideHttpClientTesting(),
       ],
     });
     service = TestBed.inject(AuthService);
     http = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => http.verify()); // falha se sobrou alguma requisição sem resposta
+  afterEach(() => http.verify());
 
   const credenciais = {
     perfil: 'PACIENTE',

@@ -1,12 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/**
- * Transforma um nome em iniciais para o avatar.
- * "Dra. Ana Souza" -> "AS" | "Dr. João" -> "J" (ignora títulos que terminam com ponto).
- *
- * Pipes são "puros": o Angular só recalcula quando o valor de entrada muda.
- * Uso: {{ nome | iniciais }}
- */
 @Pipe({ name: 'iniciais' })
 export class IniciaisPipe implements PipeTransform {
   transform(nome: string | null | undefined): string {

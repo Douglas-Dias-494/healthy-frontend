@@ -7,11 +7,6 @@ import { todayIso } from '../../../../core/utils/data';
 import { notInFuture } from '../../../../core/validators/validators';
 import { MedicoService } from '../../medico.service';
 
-/**
- * Registrar um atendimento é o que "associa" médico e paciente: só depois disso o paciente vê o médico,
- * o médico vê o paciente na lista dele e pode emitir receita para ele.
- * Passo 1: achar o paciente pelo e-mail exato. Passo 2: informar data, local e motivo.
- */
 @Component({
   selector: 'app-registrar-atendimento',
   imports: [ReactiveFormsModule, RouterLink],
@@ -34,14 +29,12 @@ export class RegistrarAtendimento {
     motivo: ['', [Validators.required, Validators.maxLength(200)]],
   });
 
-  /** Paciente encontrado na busca (passo 2 aparece quando há um). */
   protected readonly patient = signal<PacienteBusca | null>(null);
   protected readonly searching = signal(false);
   protected readonly searchError = signal<string | null>(null);
 
   protected readonly saving = signal(false);
   protected readonly saveError = signal<string | null>(null);
-  /** Último atendimento registrado (para mostrar a confirmação e o atalho "Emitir receita"). */
   protected readonly registered = signal<PacienteBusca | null>(null);
 
   protected searchPatient(): void {

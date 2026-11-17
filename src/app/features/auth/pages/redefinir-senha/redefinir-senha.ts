@@ -15,14 +15,10 @@ export class RedefinirSenha {
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
-  /** Chega pela URL do e-mail: /redefinir-senha?token=... (withComponentInputBinding liga o parâmetro). */
   readonly token = input<string>();
 
-  // O token é copiado para cá e removido da barra de endereço (ver o effect): assim ele não fica no
-  // histórico do navegador nem aparece numa captura de tela.
   private readonly storedToken = signal<string | null>(null);
 
-  /** Só mostra "link inválido" quando não há token nem na URL nem guardado. */
   protected readonly invalidLink = computed(() => !this.storedToken() && !this.token());
 
   protected readonly form = this.fb.nonNullable.group(
@@ -41,8 +37,9 @@ export class RedefinirSenha {
     effect(() => {
       const fromUrl = this.token();
       if (fromUrl && this.storedToken() === null) {
+        // Keep the token and strip it from the address bar (history, screenshots).
         this.storedToken.set(fromUrl);
-        void this.router.navigate(['/redefinir-senha'], { replaceUrl: true }); // tira o token da URL
+        void this.router.navigate(['/redefinir-senha'], { replaceUrl: true });
       }
     });
   }

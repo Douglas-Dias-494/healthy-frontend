@@ -15,7 +15,7 @@ describe('authInterceptor', () => {
     sessionStorage.clear();
     TestBed.configureTestingModule({
       providers: [
-        provideRouter([{ path: 'login', children: [] }]), // endSession() navega para /login
+        provideRouter([{ path: 'login', children: [] }]),
         provideHttpClient(withInterceptors([authInterceptor])),
         provideHttpClientTesting(),
       ],

@@ -33,7 +33,6 @@
               <td>{{ paciente.local }}</td>
               <td>{{ paciente.motivo }}</td>
               <td>
-                <!-- queryParams vira ?pacienteId=... e chega no input() da tela de nova receita -->
                 <a class="btn btn--ghost btn--sm" routerLink="/medico/nova-receita" [queryParams]="{ pacienteId: paciente.id }">
                   Nova receita
                 </a>

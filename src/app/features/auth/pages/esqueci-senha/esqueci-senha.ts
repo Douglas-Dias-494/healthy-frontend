@@ -34,7 +34,6 @@ export class EsqueciSenha {
       .forgotPassword(this.form.controls.email.value)
       .pipe(finalize(() => this.sending.set(false)))
       .subscribe({
-        // A API responde igual exista a conta ou não: a tela também não diz se o e-mail tem cadastro.
         next: () => this.sent.set(true),
         error: (e: Error) => this.error.set(e.message),
       });

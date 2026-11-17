@@ -16,7 +16,6 @@
     </p>
   } @else {
     <form class="card formulario" [formGroup]="form" (ngSubmit)="submit()" novalidate>
-      <!-- Paciente -->
       <div class="field">
         <label class="field__label" for="paciente">Paciente</label>
         <select class="field__input" id="paciente" formControlName="pacienteId">
@@ -30,7 +29,6 @@
         }
       </div>
 
-      <!-- Medicamentos (FormArray): um bloco por item, o médico adiciona e remove -->
       <fieldset class="medicamentos" formArrayName="medicamentos">
         <legend class="medicamentos__titulo">Medicamentos</legend>
 
@@ -90,7 +88,6 @@
         </button>
       </fieldset>
 
-      <!-- Observações -->
       <div class="field">
         <label class="field__label" for="observacoes">Observações (opcional)</label>
         <textarea class="field__input" id="observacoes" rows="3" formControlName="observacoes" placeholder="Recomendações gerais ao paciente"></textarea>

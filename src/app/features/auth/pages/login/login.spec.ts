@@ -8,7 +8,6 @@ describe('Login', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [Login],
-      // O template usa routerLink, que precisa do roteador (mesmo sem rotas)
       providers: [provideRouter([])],
     }).compileComponents();
 

@@ -21,10 +21,6 @@ const MENU_MEDICO: ItemMenu[] = [
   { caminho: '/medico/conta', rotulo: 'Minha conta' },
 ];
 
-/**
- * Esqueleto das áreas logadas: cabeçalho + menu + <router-outlet>.
- * As páginas de cada perfil aparecem dentro do <router-outlet>.
- */
 @Component({
   selector: 'app-shell',
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
@@ -36,7 +32,6 @@ export class Shell {
 
   protected readonly usuario = this.auth.usuario;
 
-  // computed: recalcula sozinho quando o usuário muda
   protected readonly menu = computed(() =>
     this.usuario()?.perfil === 'MEDICO' ? MENU_MEDICO : MENU_PACIENTE,
   );

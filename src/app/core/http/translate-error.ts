@@ -1,19 +1,13 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { catchError, OperatorFunction, throwError } from 'rxjs';
 
-/**
- * Converte o erro técnico do HttpClient numa mensagem para o usuário.
- * O backend responde erros no formato ProblemDetail: { status, detail, ... }.
- * O texto pronto vem em "detail" (ex.: "Já existe uma conta com este e-mail.").
- */
 export function translateError(error: HttpErrorResponse): Error {
-  // status 0 = a requisição nem chegou ao servidor (API desligada, sem internet, CORS bloqueado)
+  // status 0: the request never reached the server (API down, no network, CORS).
   if (error.status === 0) {
     return new Error('Não foi possível conectar ao servidor. Verifique se a API está rodando.');
   }
 
-  // 400 de validação: o servidor manda "erros" com a mensagem de cada campo. A primeira é a mais útil
-  // ("A senha deve ter de 8 a 72 caracteres...") e é melhor que o genérico "Dados inválidos."
+  // Validation errors carry one message per field; the first is more useful than the generic detail.
   const fieldErrors: unknown = error.error?.erros;
   if (fieldErrors && typeof fieldErrors === 'object') {
     const first = Object.values(fieldErrors as Record<string, unknown>).find(
@@ -32,10 +26,6 @@ export function translateError(error: HttpErrorResponse): Error {
   return new Error('Ocorreu um erro inesperado. Tente novamente.');
 }
 
-/**
- * Operador RxJS: troca o HttpErrorResponse por um Error com mensagem amigável.
- * Uso: this.http.get(...).pipe(mapApiError())
- */
 export function mapApiError<T>(): OperatorFunction<T, T> {
   return catchError((error: HttpErrorResponse) => throwError(() => translateError(error)));
 }

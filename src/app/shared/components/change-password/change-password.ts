@@ -4,10 +4,6 @@ import { finalize } from 'rxjs';
 import { AuthService } from '../../../core/auth/auth.service';
 import { fieldsMatch, strongPassword } from '../../../core/validators/validators';
 
-/**
- * Cartão "Alterar senha" para usuário logado (paciente ou médico).
- * Pede a senha ATUAL: quem pegou um computador desbloqueado não consegue trocar a senha da vítima.
- */
 @Component({
   selector: 'app-change-password',
   imports: [ReactiveFormsModule],

@@ -1,5 +1,4 @@
 <main class="login">
-  <!-- Lado esquerdo: identidade visual (some no celular) -->
   <aside class="login__brand" aria-hidden="true">
     <div class="brand">
       <svg class="brand__logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -12,7 +11,6 @@
     <p class="login__lead">Receitas digitais, histórico de consultas e acompanhamento dos seus remédios em um só lugar.</p>
   </aside>
 
-  <!-- Lado direito: formulário -->
   <section class="login__panel">
     <div class="form-card">
       <div class="brand brand--mobile">
@@ -27,12 +25,9 @@
       <p class="form-card__subtitle">Entre na sua conta para continuar.</p>
 
       <form class="form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
-        <!-- Perfil: paciente ou médico -->
         <fieldset class="role">
           <legend class="sr-only">Entrar como</legend>
 
-          <!-- Os dois radios gravam o seu "value" no controle "perfil".
-               O "checked" saiu: quem marca o radio agora é o valor inicial do FormControl -->
           <input class="role__input" type="radio" name="perfil" id="perfil-paciente" formControlName="perfil" value="PACIENTE" />
           <label class="role__option" for="perfil-paciente">Paciente</label>
 
@@ -40,7 +35,6 @@
           <label class="role__option" for="perfil-medico">Médico</label>
         </fieldset>
 
-        <!-- E-mail -->
         <div class="field">
           <label class="field__label" for="email">E-mail</label>
           <div class="field__control">
@@ -57,7 +51,6 @@
           }
         </div>
 
-        <!-- Senha -->
         <div class="field">
           <label class="field__label" for="senha">Senha</label>
           <div class="field__control">
@@ -65,17 +58,13 @@
               <rect x="4" y="11" width="16" height="10" rx="2" />
               <path d="M8 11V7a4 4 0 0 1 8 0v4" />
             </svg>
-            <!-- [type] troca entre "text" e "password" conforme o signal mostrarSenha() -->
             <input class="field__input field__input--with-action" formControlName="senha" id="senha" [type]="mostrarSenha() ? 'text' : 'password'" autocomplete="current-password" placeholder="Sua senha" />
-            <!-- (click) chama o método; [attr.aria-label] muda o texto lido por leitores de tela -->
             <button class="field__action" type="button" (click)="togglePassword()" [attr.aria-label]="mostrarSenha() ? 'Ocultar senha' : 'Mostrar senha'">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 @if (mostrarSenha()) {
-                  <!-- olho riscado: a senha está visível, clicar oculta -->
                   <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
                   <line x1="1" y1="1" x2="23" y2="23" />
                 } @else {
-                  <!-- olho aberto: a senha está oculta, clicar mostra -->
                   <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
                   <circle cx="12" cy="12" r="3" />
                 }
@@ -87,7 +76,6 @@
           }
         </div>
 
-        <!-- Lembrar-me / esqueci a senha -->
         <div class="form__row">
           <label class="check">
             <input class="check__input" type="checkbox" formControlName="lembrar" />
@@ -97,15 +85,10 @@
           <a class="link" routerLink="/esqueci-senha">Esqueci minha senha</a>
         </div>
 
-        <!-- "as mensagem" dá um nome ao texto do erro; o bloco só aparece se houver erro -->
         @if (erro(); as mensagem) {
           <p class="form__alert" role="alert">{{ mensagem }}</p>
         }
 
-        <!-- [disabled]: bloqueia enquanto carregando (evita clique duplo).
-             [class.is-loading]: liga o spinner do CSS.
-             Sem "form.invalid" aqui, de propósito: assim o clique chega ao onSubmit
-             e markAllAsTouched() mostra os erros dos campos vazios -->
         <button class="btn btn--primary" type="submit" [disabled]="carregando()" [class.is-loading]="carregando()">
           <span class="btn__label">Entrar</span>
         </button>

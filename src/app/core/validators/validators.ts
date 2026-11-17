@@ -1,14 +1,11 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-/**
- * Política de senha (a mesma do backend, que valida de novo): 8 a 72 caracteres, ao menos uma letra e um número.
- * A lista de "senhas comuns" só existe no servidor; se ele recusar, a mensagem dele é exibida.
- */
+/** Mirrors the backend password policy (the server also rejects common passwords). */
 export function strongPassword(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value: string = control.value ?? '';
     if (value === '') {
-      return null; // vazio é problema do Validators.required
+      return null;
     }
     const bytes = new TextEncoder().encode(value).length;
     const valid = value.length >= 8 && bytes <= 72 && /\p{L}/u.test(value) && /\d/.test(value);
@@ -16,10 +13,7 @@ export function strongPassword(): ValidatorFn {
   };
 }
 
-/**
- * Validador de GRUPO: confere se dois campos têm o mesmo valor (senha e confirmação).
- * O erro fica no grupo (form.hasError('senhasDiferentes')), não em um dos campos.
- */
+/** Group-level validator: compares two fields. The error is set on the group, not on a field. */
 export function fieldsMatch(field: string, confirmField: string): ValidatorFn {
   return (group: AbstractControl): ValidationErrors | null => {
     const value = group.get(field)?.value;
@@ -28,12 +22,10 @@ export function fieldsMatch(field: string, confirmField: string): ValidatorFn {
   };
 }
 
-/** Só os dígitos de um texto: "529.982.247-25" vira "52998224725". */
 export function onlyDigits(value: string | null | undefined): string {
   return (value ?? '').replace(/\D/g, '');
 }
 
-/** "52998224725" vira "529.982.247-25" (só para exibir). */
 export function formatCpf(digits: string | null | undefined): string {
   const d = onlyDigits(digits);
   return d.length === 11
@@ -41,7 +33,6 @@ export function formatCpf(digits: string | null | undefined): string {
     : (digits ?? '');
 }
 
-/** "11987654321" vira "(11) 98765-4321" (só para exibir). */
 export function formatPhone(digits: string | null | undefined): string {
   const d = onlyDigits(digits);
   if (d.length === 11) {
@@ -53,7 +44,6 @@ export function formatPhone(digits: string | null | undefined): string {
   return digits ?? '';
 }
 
-/** CPF válido: 11 dígitos, não todos iguais, e os dois dígitos verificadores corretos. */
 export function isValidCpf(value: string): boolean {
   const cpf = onlyDigits(value);
   if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
@@ -70,7 +60,6 @@ export function isValidCpf(value: string): boolean {
   return check(9) === Number(cpf[9]) && check(10) === Number(cpf[10]);
 }
 
-/** Aceita o CPF com ou sem máscara. */
 export function cpf(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value: string = control.value ?? '';
@@ -78,7 +67,6 @@ export function cpf(): ValidatorFn {
   };
 }
 
-/** Telefone brasileiro com DDD (10 ou 11 dígitos), com ou sem máscara. Vazio é permitido. */
 export function phone(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value: string = control.value ?? '';
@@ -87,7 +75,6 @@ export function phone(): ValidatorFn {
   };
 }
 
-/** Data (yyyy-MM-dd) que não seja futura. Compara como texto, que funciona para o formato ISO. */
 export function notInFuture(today: () => string): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value: string = control.value ?? '';

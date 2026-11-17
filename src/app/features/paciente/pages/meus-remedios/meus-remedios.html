@@ -3,12 +3,10 @@
   <p>Ative o acompanhamento para controlar a data de início e quantas unidades ainda restam.</p>
 </header>
 
-<!-- Falha ao carregar (receitas ou acompanhamentos) ou ao registrar dose / encerrar -->
 @if (receitas.error() ?? pageError(); as message) {
   <p class="alert alert--error" role="alert">{{ message }}</p>
 }
 
-<!-- ============ Em acompanhamento ============ -->
 <h2 class="section-title">Em acompanhamento</h2>
 
 @if (acompanhamentos(); as lista) {
@@ -53,7 +51,6 @@
   <p class="loading">Carregando…</p>
 }
 
-<!-- ============ Disponíveis nas receitas ============ -->
 <h2 class="section-title">Disponíveis nas suas receitas</h2>
 
 @if (disponiveis(); as itens) {
@@ -79,7 +76,6 @@
             }
           </div>
 
-          <!-- Formulário aparece só no remédio escolhido -->
           @if (abertoChave() === itemKey(item)) {
             <form class="ativar" [formGroup]="form" (ngSubmit)="confirmActivation(item)" novalidate>
               <div class="form-grid">
